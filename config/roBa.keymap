@@ -4,8 +4,12 @@
 #include <dt-bindings/zmk/pointing.h>
 
 &mt {
-    flavor = "balanced";
-    quick-tap-ms = <0>;
+//  flavor = "balanced";
+    quick-tap-ms = <250>;
+};
+
+&lt {
+    quick-tap-ms = <250>;
 };
 
 &trackball {
@@ -46,6 +50,19 @@
             #binding-cells = <2>;
             tapping-term-ms = <200>;
         };
+
+        // レイヤー3用のlayer-tap(ESC/TABの親指キー)
+        // もう片方の親指キー(39=ESC, 40=TAB)を押した瞬間にホールド確定 → 素早く押してもLANG1/LANG2が出る
+        // それ以外のキーは従来どおり tapping-term 経過でホールド
+        lt_thumb: lt_thumb {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "hold-preferred";
+            tapping-term-ms = <200>;
+            quick-tap-ms = <200>;
+            hold-trigger-key-positions = <39 40>;
+            bindings = <&mo>, <&kp>;
+        };
     };
 
     keymap {
@@ -56,7 +73,7 @@
 &kp Q        &kp W        &kp E         &kp R          &kp T                                      &kp Y            &kp U           &kp I      &kp O        &kp P
 &mt LCTRL A  &mt LSHFT S  &kp D         &lt 5 F        &mt LALT G   &kp LS(LG(S))      &none      &mt RIGHT_ALT H  &mt LEFT_GUI J  &kp K      &mt RSHFT L  &mt RCTRL SEMICOLON
 &kp Z        &kp X        &kp C         &kp V          &kp B        &none              &mo 6      &kp N            &kp M           &kp COMMA  &kp DOT      &kp SLASH
-&kp LCTRL    &kp LSHFT    &kp LEFT_ALT  &kp BACKSPACE  &lt 1 ENTER  &lt 3 ESC          &lt 3 TAB  &lt 2 SPACE                                              &none
+&kp LCTRL    &kp LSHFT    &kp LEFT_ALT  &kp BACKSPACE  &lt 1 ENTER  &lt_thumb 3 ESC       &lt_thumb 3 TAB  &lt 2 SPACE                                              &none
             >;
 
             sensor-bindings = <&inc_dec_kp PG_UP PAGE_DOWN>;
