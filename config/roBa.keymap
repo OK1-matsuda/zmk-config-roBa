@@ -4,8 +4,10 @@
 #include <dt-bindings/zmk/pointing.h>
 
 &mt {
-//  flavor = "balanced";
+    flavor = "balanced";
     quick-tap-ms = <250>;
+    // 直前のキー押下から 150ms 以内(タイピング中)はホールド判定せず即タップ扱い
+    require-prior-idle-ms = <150>;
 };
 
 &lt {
@@ -52,15 +54,15 @@
         };
 
         // レイヤー3用のlayer-tap(ESC/TABの親指キー)
-        // もう片方の親指キー(39=ESC, 40=TAB)を押した瞬間にホールド確定 → 素早く押してもLANG1/LANG2が出る
-        // それ以外のキーは従来どおり tapping-term 経過でホールド
+        // hold-preferred: 押している間に他のキーを押した瞬間にホールド確定
+        // → もう片方の親指キーを素早く押しても LANG1/LANG2、矢印キーも即座に出る
+        // ※ hold-trigger-key-positions は指定しない
         lt_thumb: lt_thumb {
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
             flavor = "hold-preferred";
             tapping-term-ms = <200>;
             quick-tap-ms = <200>;
-            hold-trigger-key-positions = <39 40>;
             bindings = <&mo>, <&kp>;
         };
     };
